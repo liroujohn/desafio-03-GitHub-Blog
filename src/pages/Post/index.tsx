@@ -1,21 +1,43 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useCallback, useEffect, useState } from 'react'
 import { PostHeader } from './components/PostHeader'
-import { PostContainer } from './styles'
+import { api } from '../../lib/axios'
+import { useParams } from 'react-router-dom'
+import { IPost } from '../Blog'
+import { PostContent } from './components/PostContent'
+
+const username = import.meta.env.VITE_GITHUB_USERNAME
+const repoName = import.meta.env.VITE_GITHUB_REPONAME
 
 export function Post() {
+  const [postData, setPostData] = useState<IPost>({} as IPost)
+  const [isLoading, setIsLoading] = useState(true)
+
+  const { id } = useParams()
+
+  const getPostDetails = useCallback(async () => {
+    try {
+      setIsLoading(true)
+
+      const response = await api.get(
+        `/repos/${username}/${repoName}/issues/${id}`,
+      )
+
+      setPostData(response.data)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [postData])
+
+  useEffect(() => {
+    getPostDetails()
+  }, [])
+
   return (
     <>
-      <PostHeader />
+      <PostHeader isLoading={isLoading} postData={postData} />
 
-      <PostContainer>
-        <p>
-          Programming languages all have built-in data structures, but these
-          often differ from one language to another. This article attempts to
-          list the built-in data structures available in JavaScript and what
-          properties they have. These can be used to build other data
-          structures. Wherever possible, comparisons with other languages are
-          drawn.
-        </p>
-      </PostContainer>
+      {!isLoading && <PostContent content={postData.body} />}
     </>
   )
 }
