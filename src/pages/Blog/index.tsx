@@ -1,9 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useState } from 'react'
 import { Post } from './components/Post'
 import { SearchInput } from './components/SearchInput'
 import { Profile } from './components/profile'
 import { PostListContainer } from './styles'
 import { api } from '../../lib/axios'
+import { Spinner } from '../../components/Spinner'
 
 const username = import.meta.env.VITE_GITHUB_USERNAME
 const repoName = import.meta.env.VITE_GITHUB_REPONAME
@@ -42,17 +44,23 @@ export function Blog() {
 
   useEffect(() => {
     getPosts()
-  }, [getPosts])
+  }, [])
 
   return (
     <div>
       <Profile />
-      <SearchInput getPosts={getPosts} />
-      <PostListContainer>
-        {posts.map((post) => (
-          <Post key={post.number} post={post} />
-        ))}
-      </PostListContainer>
+      <SearchInput postsLength={posts.length} getPosts={getPosts} />
+      {isloading ? (
+        <Spinner />
+      ) : (
+        <>
+          <PostListContainer>
+            {posts.map((post) => (
+              <Post key={post.number} post={post} />
+            ))}
+          </PostListContainer>
+        </>
+      )}
     </div>
   )
 }
