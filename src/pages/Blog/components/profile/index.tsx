@@ -48,7 +48,7 @@ export function Profile() {
           <ProfilDetails>
             <header>
               <h1>{profileData.name}</h1>
-              <ExternalLink text="Github" href="#" />
+              <ExternalLink text="Github" href={profileData.html_url} />
             </header>
 
             <p>{profileData.bio}</p>
