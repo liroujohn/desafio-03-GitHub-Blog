@@ -3,7 +3,7 @@ import { ProfilDetails, ProfileContainer, ProfilePicture } from './styles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faBuilding, faUserGroup } from '@fortawesome/free-solid-svg-icons'
-import { Profiler, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { api } from '../../../../lib/axios'
 import { Spinner } from '../../../../components/Spinner'
 
